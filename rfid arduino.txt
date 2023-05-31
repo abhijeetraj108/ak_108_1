@@ -1,0 +1,134 @@
+#include<SPI.h>
+#include<MFRC522.h>
+
+int rst=9;
+int sda=10;
+int i;
+String password= "";
+MFRC522 mfrc522(sda,rst);
+ void firstStudent();  
+ void secondStudent();
+ void thirdStudent();
+ void fourthStudent();
+ void fifthStudent();
+ void falseStudent();
+ void setup() {
+  // put your setup code here, to run once:
+ pinMode(8,OUTPUT);       // to glow green bulb
+ pinMode(7,OUTPUT);       // to glow red bulb
+ pinMode(6,OUTPUT);       // for sound/buzzer
+ Serial.begin(9600);      //Initialize serial communications with the PC
+ SPI.begin();           //Initialize serial communications with the pheripheral device over short distance
+ mfrc522.PCD_Init();  //initializes the MFRC522 chip  ;
+ delay(4);           //waits for it to be ready again MFRC522 Chip ;
+ Serial.println("SHOW YOUR ID CARD ");         
+}
+//profile of first student
+void firstStudent(){
+  digitalWrite(8,HIGH);  // to glow green bulb
+  Serial.println("PRESENT");
+  Serial.println("NAME:- GAURAV KUMAR ");
+  Serial.println("ROLL NO:- 22MM02009 ");
+  Serial.println("SCHOOL:- SMMME ");
+  Serial.println("Welcome");
+  delay(1000);
+}
+//profile of second student
+void secondStudent(){
+  digitalWrite(8,HIGH);  // to glow green bulb
+  Serial.println("PRESENT");
+  Serial.println("NAME:- SANJAY KUMAR PANDIT");
+  Serial.println("ROLL NO:- 22CS02012 ");
+  Serial.println("SCHOOL:- SES ");
+  Serial.println("Welcome");
+  delay(1000);
+}
+//profile of third student
+  void thirdStudent(){
+  digitalWrite(8,HIGH);  // to glow green bulb
+  Serial.println("PRESENT");
+  Serial.println("NAME:- ABHIJEET RAJ ");
+  Serial.println("ROLL NO:- 22EE01017 ");
+  Serial.println("SCHOOL:- SES ");
+  Serial.println("Welcome");
+  delay(1000);
+}
+//profile of fourth student
+ void fourthStudent(){
+  digitalWrite(8,HIGH);  // to glow green bulb
+  Serial.println("PRESENT");
+  Serial.println("NAME:- ADITYA SINGH SIKARWAR ");
+  Serial.println("ROLL NO:- 22EE01030 ");
+  Serial.println("SCHOOL:- SES ");
+  Serial.println("Welcome");
+  delay(1000);
+}
+//profile of fifth student
+ void fifthStudent(){
+  digitalWrite(8,HIGH);  // to glow green bulb
+  Serial.println("PRESENT");
+  Serial.println("NAME:- DEBASHISH KAR ");
+  Serial.println("ROLL NO:- 22EE01070 ");
+  Serial.println("SCHOOL:- SES ");
+  Serial.println("Welcome");
+  delay(1000);
+}
+void falseStudent(){
+digitalWrite(7,HIGH);  // to glow red bulb
+digitalWrite(6,HIGH);  // for sound/buzzer
+Serial.println("this is not valid id card..... ");
+Serial.println("UNAUTHORIZE ACCESS......");
+delay(1000);
+}
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  //  Reset the loop if no new card present on the sensor/reader.
+if(!mfrc522.PICC_IsNewCardPresent()){
+  return ;
+}
+// select one of the card;
+if(!mfrc522.PICC_ReadCardSerial()){
+  return ;
+}
+for(i=0;i<4;i++){
+  //Serial.println(mfrc522.uid.uidByte[i]);
+  password=password+String(mfrc522.uid.uidByte[i],HEX);
+  if(i<3){
+    password=password+" ";
+  }
+}
+password.toUpperCase();
+Serial.println();
+Serial.println("YOUR ID NUMBER IS :'" + password + "'");
+
+if(password=="C7 47 B8 89"){ 
+  firstStudent();
+}
+ else if(password=="E2 37 A9 89"){ 
+  secondStudent();
+}
+
+else if(password=="B3 61 A6 89"){ 
+  thirdStudent();
+}
+else if(password=="E8 F0 A8 89"){ 
+  fourthStudent();
+}
+else if(password=="31 C9 A5 89"){ 
+ fifthStudent();
+}
+else
+{
+falseStudent();
+}
+digitalWrite(7,LOW);  // to turn off red bulb
+digitalWrite(6,LOW);  // for turn off sound/buzzer
+digitalWrite(8,LOW);  // for turn off green bulb
+
+password="";  // to again initailize passwors is empty
+delay(2000);
+}
+
+
+
